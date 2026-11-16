@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTM STYLE — لوحة التحكم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Anton&display=swap" rel="stylesheet">
+<style>
+  /* ============ GTM ADMIN — ملف لوحده، تقدر تعدل فيه براحتك ============ */
+  :root{ --bg:#0a0a0a; --surface:#141414; --line:rgba(255,255,255,.12); --text:#fff; --muted:#a1a1aa; --lime:#d4ff3f; --pink:#ff5ca8; --gold:#ffc24b; --red:#ff5c5c; --green:#22c55e; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Cairo",sans-serif; }
+  a{ color:inherit; }
+  .wrap{ max-width:1100px; margin:0 auto; padding:18px 16px 60px; }
+  /* الهيدر */
+  header{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:14px; }
+  .logo{ display:flex; gap:10px; align-items:center; }
+  .logo-b{ width:44px; height:44px; border-radius:12px; background:var(--lime); color:#000; display:grid; place-items:center; font-family:"Anton",sans-serif; font-size:22px; }
+  .logo h1{ margin:0; font-family:"Anton",sans-serif; font-size:26px; letter-spacing:.5px; }
+  .logo h1 span{ color:var(--lime); }
+  .logo p{ margin:2px 0 0; color:var(--muted); font-size:12px; }
+  .btn{ border:0; cursor:pointer; border-radius:999px; padding:10px 18px; font-family:inherit; font-weight:800; font-size:14px; }
+  .btn-lime{ background:var(--lime); color:#000; }
+  .btn-ghost{ background:#fff; color:#000; }
+  .btn-dark{ background:rgba(255,255,255,.08); color:#fff; border:1px solid var(--line); }
+  .btn-danger{ background:rgba(255,92,92,.15); color:#ff9a9a; border:1px solid rgba(255,92,92,.35); }
+  .btn-small{ padding:7px 12px; font-size:12px; }
+  /* كروت الاحصائيات */
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:18px 0; }
+  @media(max-width:700px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+  .stat{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; text-align:center; }
+  .stat b{ display:block; font-family:"Anton",sans-serif; font-size:32px; color:var(--lime); }
+  .stat span{ color:var(--muted); font-size:12px; }
+  /* التبويبات */
+  .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 16px; }
+  .tab{ padding:10px 20px; border-radius:999px; background:rgba(255,255,255,.07); border:1px solid var(--line); color:#fff; cursor:pointer; font-family:inherit; font-weight:800; }
+  .tab.active{ background:var(--lime); color:#000; border-color:var(--lime); }
+  /* الفورم */
+  .grid2{ display:grid; grid-template-columns:380px 1fr; gap:16px; align-items:start; }
+  @media(max-width:900px){ .grid2{ grid-template-columns:1fr; } }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:22px; padding:18px; }
+  .card h2{ margin:0 0 14px; font-size:19px; }
+  label{ display:block; font-size:13px; font-weight:700; margin:12px 0 6px; }
+  input, select, textarea{ width:100%; background:#000; border:1px solid var(--line); color:#fff; border-radius:12px; padding:11px 12px; font-family:inherit; font-size:14px; outline:none; }
+  input:focus, select:focus, textarea:focus{ border-color:var(--lime); }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .hint{ color:var(--muted); font-size:12px; margin-top:6px; }
+  .upload-box{ border:2px dashed var(--line); border-radius:14px; padding:14px; background:#000; text-align:center; margin-top:6px; }
+  .upload-box input[type=file]{ background:transparent; border:0; padding:0; cursor:pointer; }
+  .upload-box .up-hint{ color:var(--muted); font-size:12px; margin:8px 0 0; }
+  .preview-wrap{ display:none; margin-top:12px; position:relative; }
+  .preview-wrap img{ width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:1px solid var(--line); }
+  .preview-wrap.show{ display:block; }
+  .msg{ background:rgba(212,255,63,.12); border:1px solid rgba(212,255,63,.35); padding:10px 12px; border-radius:12px; font-weight:700; font-size:13px; margin-top:12px; display:none; }
+  .msg.show{ display:block; }
+  /* ليستة المنتجات */
+  .p-item{ display:flex; gap:12px; align-items:center; background:#0f0f0f; border:1px solid var(--line); border-radius:16px; padding:12px; margin-bottom:10px; flex-wrap:wrap; }
+  .p-thumb{ width:62px; height:62px; border-radius:14px; display:grid; place-items:center; font-size:30px; overflow:hidden; flex-shrink:0; }
+  .p-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .p-info{ flex:1; min-width:180px; }
+  .p-info b{ display:block; font-size:14px; }
+  .p-info span{ color:var(--muted); font-size:12px; }
+  .badge{ display:inline-block; font-size:11px; padding:3px 8px; border-radius:999px; background:rgba(255,255,255,.1); margin-top:4px; }
+  .badge.hidden-b{ background:rgba(255,92,92,.18); color:#ff9a9a; }
+  /* الطلبات */
+  .o-card{ background:#0f0f0f; border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:12px; }
+  .o-top{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .o-top b{ font-size:15px; }
+  .status{ padding:5px 10px; border-radius:999px; font-size:12px; font-weight:800; }
+  .status-جديد{ background:#d4ff3f; color:#000; }
+  .status-قيد-التجهيز{ background:#ffc24b; color:#000; }
+  .status-تم-الشحن{ background:#60a5fa; color:#000; }
+  .status-تم-التوصيل{ background:#22c55e; color:#000; }
+  .status-ملغي{ background:#ff5c5c; color:#fff; }
+  .o-items{ color:var(--muted); font-size:13px; margin:10px 0; line-height:1.9; }
+  .o-actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .o-actions select{ width:auto; min-width:150px; }
+  /* صفحة الدخول */
+  .login-box{ max-width:440px; margin:50px auto; background:var(--surface); border:1px solid var(--line); border-radius:28px; padding:28px; text-align:center; }
+  .login-box .lock{ width:64px; height:64px; margin:0 auto; border-radius:50%; background:rgba(212,255,63,.15); display:grid; place-items:center; font-size:30px; }
+  .err{ background:rgba(255,92,92,.12); border:1px solid rgba(255,92,92,.35); color:#ffb3b3; padding:10px; border-radius:12px; font-size:13px; font-weight:700; display:none; margin-top:12px; }
+  .err.show{ display:block; }
+  .shake{ animation:shake .4s; border-color:#ff5c5c !important; }
+  @keyframes shake{ 0%,100%{ transform:translateX(0);} 25%{ transform:translateX(-6px);} 75%{ transform:translateX(6px);} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== الهيدر ===== -->
+  <header>
+    <div class="logo">
+      <div class="logo-b">G</div>
+      <div>
+        <h1>GTM STYLE <span>ADMIN</span></h1>
+        <p>لوحة تحكم خاصة — المنتجات • الطلبات • الإعدادات</p>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-ghost" onclick="location.href='index.html'">العودة للمتجر ←</button>
+      <button class="btn btn-dark" id="logoutBtn" onclick="logout()" style="display:none;">خروج</button>
+    </div>
+  </header>
+
+  <!-- ===== صفحة الدخول ===== -->
+  <div id="loginView">
+    <div class="login-box">
+      <div class="lock">🔒</div>
+      <h2 style="margin:14px 0 4px;">دخول الإدارة</h2>
+      <p style="color:var(--muted); font-size:13px; margin:0;">هذه الصفحة خاصة بإدارة المتجر فقط.</p>
+      <form onsubmit="tryLogin(event)">
+        <label style="text-align:right;">كلمة السر</label>
+        <input id="passInput" type="password" placeholder="اكتب كلمة السر" autofocus>
+        <div id="loginErr" class="err">كلمة السر غير صحيحة — حاول مرة أخرى.</div>
+        <button class="btn btn-lime" style="width:100%; margin-top:16px; padding:14px;">🔑 دخول لوحة التحكم</button>
+      </form>
+      <p style="font-size:12px; color:var(--gold); background:rgba(255,194,75,.1); border:1px solid rgba(255,194,75,.3); padding:10px; border-radius:12px; margin-top:16px;">كلمة السر الافتراضية: GTM2026 — غيرها من الإعدادات</p>
+      <p style="font-size:11px; color:var(--muted);">نصيحة أمان: غيّر كلمة السر فوراً بعد أول دخول.</p>
+    </div>
+  </div>
+
+  <!-- ===== لوحة التحكم ===== -->
+  <div id="adminView" style="display:none;">
+
+    <div class="stats">
+      <div class="stat"><b id="statProducts">0</b><span>منتج</span></div>
+      <div class="stat"><b id="statOrders">0</b><span>طلب</span></div>
+      <div class="stat"><b id="statNew">0</b><span>طلب جديد</span></div>
+      <div class="stat"><b id="statRevenue">0</b><span>إجمالي المبيعات (ج)</span></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="products" onclick="switchTab('products')">المنتجات</button>
+      <button class="tab" data-tab="orders" onclick="switchTab('orders')">الطلبات</button>
+      <button class="tab" data-tab="settings" onclick="switchTab('settings')">الإعدادات</button>
+      <button class="tab" onclick="reloadAll()" style="margin-right:auto;">↻ تحديث البيانات</button>
+    </div>
+    <div id="msg" class="msg"></div>
+
+    <!-- ===== تبويب المنتجات ===== -->
+    <div id="tab-products">
+      <div class="grid2">
+        <!-- فورم إضافة / تعديل -->
+        <form class="card" onsubmit="saveProduct(event)">
+          <h2 id="formTitle">➕ إضافة منتج جديد</h2>
+          <input type="hidden" id="editRecId" value="">
+          <input type="hidden" id="editProdId" value="">
+          <label>اسم المنتج *</label>
+          <input id="f_name" placeholder="مثال: تيشيرت أوفرسايز GTM" required>
+          <div class="row2">
+            <div><label>القسم</label>
+              <select id="f_cat" onchange="updateSubOptions()">
+                <option value="men">رجالي</option>
+                <option value="women">حريمي</option>
+              </select>
+            </div>
+            <div><label>النوع الفرعي</label>
+              <select id="f_sub"></select>
+            </div>
+          </div>
+          <div class="row2">
+            <div><label>السعر (ج) *</label><input id="f_price" type="number" value="450" required></div>
+            <div><label>السعر قبل الخصم</label><input id="f_old" type="number" value="650"></div>
+          </div>
+          <label>المقاسات — مفصولة بفاصلة</label>
+          <input id="f_sizes" value="S,M,L,XL" placeholder="S,M,L,XL">
+          <div class="row2">
+            <div><label>المخزون</label><input id="f_stock" type="number" value="20"></div>
+            <div><label>إيموجي المنتج</label><input id="f_emoji" value="👕" placeholder="👕"></div>
+          </div>
+          <label>العلامة (Badge)</label>
+          <input id="f_badge" value="جديد" placeholder="جديد / خصم / ...">
+          <label>صورة المنتج — من الجهاز 📸</label>
+          <div class="upload-box">
+            <input type="file" id="f_imageFile" accept="image/*" onchange="handleImageFile(event)">
+            <p class="up-hint">دوس واختار صورة من موبايلك أو جهازك — هتتضغط أوتوماتيك عشان المتجر يفضل سريع.</p>
+            <div id="previewWrap" class="preview-wrap">
+              <img id="f_imagePreview" src="" alt="معاينة الصورة">
+              <button type="button" class="btn btn-danger btn-small" onclick="clearImage()" style="margin-top:8px;">✕ حذف الصورة</button>
+            </div>
+            <p id="compressNote" style="display:none; color:var(--gold); font-size:12px; font-weight:700; margin:8px 0 0;">جارٍ ضغط الصورة... استنى ثانية</p>
+          </div>
+          <label style="margin-top:12px;">أو لينك صورة (اختياري — لو مش هترفع من الجهاز)</label>
+          <input id="f_image" placeholder="https://..." oninput="previewLinkImage()">
+          <button class="btn btn-lime" style="width:100%; margin-top:16px; padding:13px;" id="saveBtn">إضافة المنتج</button>
+          <button type="button" class="btn btn-dark" style="width:100%; margin-top:8px; display:none;" id="cancelEditBtn" onclick="resetForm()">إلغاء التعديل</button>
+          <p class="hint">التعديلات بتتحفظ فوراً وتظهر في المتجر، وتفضل بعد إعادة التحميل.</p>
+        </form>
+
+        <!-- ليستة المنتجات -->
+        <div class="card">
+          <h2>كل المنتجات (<span id="productsCount">0</span>) — عدّل، احذف، أو أظهر / أخفِ</h2>
+          <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+            <input id="searchProd" placeholder="ابحث باسم المنتج..." oninput="renderProducts()" style="flex:1; min-width:180px;">
+            <select id="filterCat" onchange="renderProducts()" style="width:auto;">
+              <option value="all">كل الأقسام</option><option value="men">رجالي</option><option value="women">حريمي</option>
+            </select>
+          </div>
+          <div id="productsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== تبويب الطلبات ===== -->
+    <div id="tab-orders" style="display:none;">
+      <div class="card">
+        <h2>الطلبات — الأحدث أولاً</h2>
+        <p class="hint" id="ordersHint"></p>
+        <div id="ordersList"></div>
+      </div>
+    </div>
+
+    <!-- ===== تبويب الإعدادات ===== -->
+    <div id="tab-settings" style="display:none;">
+      <div class="card" style="max-width:650px;">
+        <h2>⚙️ إعدادات المتجر</h2>
+        <form onsubmit="saveSettings(event)">
+          <label>اسم المتجر</label>
+          <input id="s_store" value="GTM STYLE">
+          <label>رقم الواتساب (اللي بتستقبل عليه الطلبات)</label>
+          <input id="s_whatsapp" value="01020199392" dir="ltr" placeholder="01020199392">
+          <p class="hint">الطلبات بتتبعت على الرقم ده من صفحة التأكيد.</p>
+          <label>كلمة سر الإدارة</label>
+          <input id="s_pass" value="GTM2026">
+          <p class="hint">غيّرها فوراً لحماية لوحة التحكم.</p>
+          <div class="row2">
+            <div><label>سعر الشحن (ج)</label><input id="s_ship" type="number" value="60"></div>
+            <div><label>شحن مجاني فوق (ج)</label><input id="s_free" type="number" value="1500"></div>
+          </div>
+          <button class="btn btn-lime" style="width:100%; margin-top:16px; padding:13px;">💾 حفظ الإعدادات</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ================= بيانات المتجر — نفس مكان المتجر بالظبط =================
+   المتجر بيقرأ من localStorage بنفس المفاتيح دي، فأي تعديل هنا بيظهر في المتجر فوراً.
+   gtm_records_gtm_products / gtm_records_gtm_orders / gtm_records_gtm_settings
+*/
+const KEY = (c) => "gtm_records_" + c;
+const DEFAULT_SETTINGS = { whatsapp:"01020199392", adminPassword:"GTM2026", shipping:60, freeShipping:1500, storeName:"GTM STYLE" };
+const SUBS = {
+  men: ["ملابس رجالي","تيشيرتات","بناطيل","قمصان","أحذية رجالي"],
+  women: ["ملابس حريمي","فساتين","بلوزات","أطقم","شنط وإكسسوارات"]
+};
+const GRAD_BY_EMOJI = {
+  "👕":"linear-gradient(135deg,#d6ff3f,#0f5132)", "👖":"linear-gradient(135deg,#3a3a3f,#d6ff3f)",
+  "👔":"linear-gradient(135deg,#ffc24b,#7a2e0e)", "👟":"linear-gradient(135deg,#111,#d6ff3f)",
+  "👗":"linear-gradient(135deg,#ff5ca8,#7c3aed)", "👚":"linear-gradient(135deg,#a78bfa,#ff5ca8)",
+  "🧥":"linear-gradient(135deg,#f472b6,#111827)", "👜":"linear-gradient(135deg,#ffc24b,#ff5ca8)",
+  "👠":"linear-gradient(135deg,#ff5ca8,#111)", "✨":"linear-gradient(135deg,#ffc24b,#7a2e0e)"
+};
+
+function load(c){ try{ return JSON.parse(localStorage.getItem(KEY(c)) || "[]"); }catch{ return []; } }
+function save(c, arr){ localStorage.setItem(KEY(c), JSON.stringify(arr)); }
+function getProducts(){ return load("gtm_products").map(r => ({ _recId: r.id, ...r.value })); }
+function getOrders(){ return load("gtm_orders").map(r => ({ _recId: r.id, ...r.value })); }
+function getSettings(){
+  const rec = load("gtm_settings")[0];
+  return rec ? { _recId: rec.id, ...DEFAULT_SETTINGS, ...rec.value } : { ...DEFAULT_SETTINGS, _recId: null };
+}
+function showMsg(t){ const m=document.getElementById("msg"); m.textContent=t; m.classList.add("show"); setTimeout(()=>m.classList.remove("show"), 3500); }
+function toWA(num){ let n=(num||"").replace(/\D/g,""); if(n.startsWith("20")) return n; if(n.startsWith("0")) return "20"+n.slice(1); if(n.startsWith("1")) return "20"+n; return n; }
+function esc(s){ return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ---------- الدخول ---------- */
+function tryLogin(e){
+  e.preventDefault();
+  const s = getSettings();
+  const v = document.getElementById("passInput").value.trim();
+  if(v === s.adminPassword){
+    sessionStorage.setItem("gtm_admin_logged","1");
+    openAdmin();
+  } else {
+    document.getElementById("loginErr").classList.add("show");
+    const inp=document.getElementById("passInput");
+    inp.classList.add("shake"); setTimeout(()=>inp.classList.remove("shake"),400);
+  }
+}
+function logout(){ sessionStorage.removeItem("gtm_admin_logged"); location.reload(); }
+function openAdmin(){
+  document.getElementById("loginView").style.display="none";
+  document.getElementById("adminView").style.display="block";
+  document.getElementById("logoutBtn").style.display="block";
+  const s=getSettings();
+  document.getElementById("s_store").value=s.storeName;
+  document.getElementById("s_whatsapp").value=s.whatsapp;
+  document.getElementById("s_pass").value=s.adminPassword;
+  document.getElementById("s_ship").value=s.shipping;
+  document.getElementById("s_free").value=s.freeShipping;
+  updateSubOptions();
+  reloadAll();
+}
+
+/* ---------- التبويبات ---------- */
+function switchTab(name){
+  document.querySelectorAll(".tab[data-tab]").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
+  ["products","orders","settings"].forEach(n=>{
+    document.getElementById("tab-"+n).style.display = (n===name ? "block" : "none");
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function reloadAll(){ renderStats(); renderProducts(); renderOrders(); }
+
+/* ---------- الاحصائيات ---------- */
+function renderStats(){
+  const ps=getProducts(), os=getOrders();
+  document.getElementById("statProducts").textContent=ps.length;
+  document.getElementById("statOrders").textContent=os.length;
+  document.getElementById("statNew").textContent=os.filter(o=>o.status==="جديد").length;
+  document.getElementById("statRevenue").textContent=os.reduce((a,o)=>a+(Number(o.total)||0),0).toLocaleString("ar-EG");
+}
+
+/* ---------- المنتجات ---------- */
+function updateSubOptions(){
+  const cat=document.getElementById("f_cat").value;
+  const sel=document.getElementById("f_sub");
+  sel.innerHTML = SUBS[cat].map(s=>`<option>${s}</option>`).join("");
+}
+/* ---------- رفع صورة من الجهاز ---------- */
+let isCompressing = false;
+function showImagePreview(src){
+  const wrap=document.getElementById("previewWrap");
+  const img=document.getElementById("f_imagePreview");
+  if(src && (src.startsWith("data:") || src.startsWith("http"))){
+    img.src=src; wrap.classList.add("show");
+  } else { wrap.classList.remove("show"); img.src=""; }
+}
+function previewLinkImage(){
+  const v=document.getElementById("f_image").value.trim();
+  if(v) showImagePreview(v);
+}
+function clearImage(){
+  document.getElementById("f_image").value="";
+  document.getElementById("f_imageFile").value="";
+  showImagePreview("");
+}
+function compressImage(file){
+  return new Promise((resolve, reject)=>{
+    const reader=new FileReader();
+    reader.onload = ()=>{
+      const img=new Image();
+      img.onload = ()=>{
+        // ضغط: أكبر مقاس 900px + جودة 0.75 عشان الصورة متتقلش المتجر
+        const max=900;
+        let w=img.width, h=img.height;
+        if(w>max || h>max){
+          const r=Math.min(max/w, max/h);
+          w=Math.round(w*r); h=Math.round(h*r);
+        }
+        const canvas=document.createElement("canvas");
+        canvas.width=w; canvas.height=h;
+        const ctx=canvas.getContext("2d");
+        ctx.fillStyle="#111"; ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL("image/jpeg", 0.75));
+      };
+      img.onerror=()=>reject(new Error("مش قادر أقرا الصورة"));
+      img.src=reader.result;
+    };
+    reader.onerror=()=>reject(new Error("مش قادر أقرا الملف"));
+    reader.readAsDataURL(file);
+  });
+}
+async function handleImageFile(e){
+  const file=e.target.files && e.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith("image/")){ alert("اختار صورة بس"); return; }
+  isCompressing=true;
+  document.getElementById("compressNote").style.display="block";
+  document.getElementById("saveBtn").textContent="استنى... بنضغط الصورة";
+  try{
+    const dataUrl=await compressImage(file);
+    document.getElementById("f_image").value=dataUrl;
+    showImagePreview(dataUrl);
+    showMsg("تم رفع الصورة من جهازك ✅ — هتظهر في المتجر بعد الحفظ.");
+  }catch(err){
+    alert("حصل مشكلة في الصورة، جرب صورة تانية أو لينك.");
+  }
+  isCompressing=false;
+  document.getElementById("compressNote").style.display="none";
+  document.getElementById("saveBtn").textContent=document.getElementById("editRecId").value ? "حفظ التعديل" : "إضافة المنتج";
+}
+
+function resetForm(){
+  document.getElementById("editRecId").value=""; document.getElementById("editProdId").value="";
+  document.getElementById("formTitle").textContent="➕ إضافة منتج جديد";
+  document.getElementById("saveBtn").textContent="إضافة المنتج";
+  document.getElementById("cancelEditBtn").style.display="none";
+  document.getElementById("f_name").value=""; document.getElementById("f_price").value="450";
+  document.getElementById("f_old").value="650"; document.getElementById("f_sizes").value="S,M,L,XL";
+  document.getElementById("f_stock").value="20"; document.getElementById("f_emoji").value="👕";
+  document.getElementById("f_badge").value="جديد"; document.getElementById("f_image").value="";
+  document.getElementById("f_imageFile").value=""; showImagePreview("");
+  document.getElementById("f_cat").value="men"; updateSubOptions();
+}
+function renderProducts(){
+  const q=(document.getElementById("searchProd").value||"").trim();
+  const cat=document.getElementById("filterCat").value;
+  let list=getProducts();
+  if(cat!=="all") list=list.filter(p=>p.cat===cat);
+  if(q) list=list.filter(p=>p.name.includes(q));
+  document.getElementById("productsCount").textContent=list.length;
+  const el=document.getElementById("productsList");
+  if(!list.length){ el.innerHTML='<p style="color:var(--muted);">مفيش منتجات — ضيف أول منتج من الفورم.</p>'; return; }
+  el.innerHTML=list.map(p=>{
+    const img = p.imageUrl ? `<img src="${esc(p.imageUrl)}" onerror="this.parentNode.textContent='${esc(p.emoji||"👕")}'">` : esc(p.emoji||"👕");
+    return `<div class="p-item">
+      <div class="p-thumb" style="background:${esc(p.grad||"linear-gradient(135deg,#333,#111)") }">${img}</div>
+      <div class="p-info"><b>${esc(p.name)} ${p.visible===false?'<span class="badge hidden-b">مخفي</span>':''}</b>
+      <span>${p.cat==="men"?"رجالي":"حريمي"} • ${esc(p.sub)} • ${esc(p.sizes? p.sizes.join(",") : "")} • مخزون: ${p.stock??0}</span><br>
+      <span><b style="color:#fff;">${Number(p.price).toLocaleString("ar-EG")} ج</b> <s>${Number(p.old||p.price).toLocaleString("ar-EG")} ج</s> • ${esc(p.badge||"")}</span></div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn btn-dark btn-small" onclick="editProduct('${p._recId}')">تعديل</button>
+        <button class="btn btn-dark btn-small" onclick="toggleVisible('${p._recId}')">${p.visible===false?"إظهار":"إخفاء"}</button>
+        <button class="btn btn-danger btn-small" onclick="deleteProduct('${p._recId}')">حذف</button>
+      </div></div>`;
+  }).join("");
+}
+function editProduct(recId){
+  const rec=load("gtm_products").find(r=>r.id===recId); if(!rec) return;
+  const p=rec.value;
+  document.getElementById("editRecId").value=recId;
+  document.getElementById("editProdId").value=p.id;
+  document.getElementById("formTitle").textContent="✏️ تعديل: "+p.name;
+  document.getElementById("saveBtn").textContent="حفظ التعديل";
+  document.getElementById("cancelEditBtn").style.display="block";
+  document.getElementById("f_name").value=p.name||"";
+  document.getElementById("f_cat").value=p.cat||"men"; updateSubOptions();
+  document.getElementById("f_sub").value=p.sub||"";
+  document.getElementById("f_price").value=p.price||0;
+  document.getElementById("f_old").value=p.old||p.price||0;
+  document.getElementById("f_sizes").value=(p.sizes||[]).join(",");
+  document.getElementById("f_stock").value=p.stock??0;
+  document.getElementById("f_emoji").value=p.emoji||"👕";
+  document.getElementById("f_badge").value=p.badge||"جديد";
+  document.getElementById("f_image").value=p.imageUrl||"";
+  showImagePreview(p.imageUrl||"");
+  switchTab("products"); window.scrollTo({top:0, behavior:"smooth"});
+}
+function saveProduct(e){
+  e.preventDefault();
+  if(isCompressing){ alert("استنى ثانية... بنضغط الصورة"); return; }
+  const name=document.getElementById("f_name").value.trim();
+  if(!name){ alert("اكتب اسم المنتج الأول"); return; }
+  const cat=document.getElementById("f_cat").value;
+  const sub=document.getElementById("f_sub").value;
+  const price=Number(document.getElementById("f_price").value)||0;
+  const old=Number(document.getElementById("f_old").value)||price;
+  const sizes=document.getElementById("f_sizes").value.split(",").map(s=>s.trim()).filter(Boolean);
+  if(!sizes.length){ alert("اكتب المقاسات مفصولة بفاصلة، مثال: S,M,L,XL"); return; }
+  const stock=Number(document.getElementById("f_stock").value)||0;
+  const emoji=document.getElementById("f_emoji").value.trim()||"👕";
+  const badge=document.getElementById("f_badge").value.trim()||"جديد";
+  const imageUrl=document.getElementById("f_image").value.trim()||undefined;
+  const recId=document.getElementById("editRecId").value;
+  const arr=load("gtm_products");
+
+  if(recId){
+    const idx=arr.findIndex(r=>r.id===recId);
+    if(idx!==-1){
+      const oldP=arr[idx].value;
+      arr[idx].value={ ...oldP, name, cat, sub, price, old, sizes, stock, emoji, badge, imageUrl };
+      try{ save("gtm_products", arr); }catch(err){ alert("الصورة كبيرة أوي على التخزين — جرب صورة أصغر أو ارفعها كلينك بدل الجهاز."); return; }
+      showMsg(`تم تعديل “${name}” بنجاح — ظهر في المتجر فوراً.`);
+    }
+  } else {
+    const pid="p"+Date.now();
+    const prod={ id:pid, name, cat, sub, price, old, sizes, stock, emoji, badge, imageUrl,
+      grad: GRAD_BY_EMOJI[emoji]||"linear-gradient(135deg,#d6ff3f,#0f5132)", grad2:"linear-gradient(135deg,#111,#333)",
+      rating:4.9, sold:"0", colors:["#111","#fff"], visible:true, altEmoji:emoji };
+    const newRec={ id:"rec-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,6), value:prod };
+    arr.push(newRec);
+    try{ save("gtm_products", arr); }catch(err){ alert("الصورة كبيرة أوي على التخزين — جرب صورة أصغر أو ارفعها كلينك بدل الجهاز."); return; }
+    showMsg(`تم إضافة “${name}” بنجاح — ظهر في المتجر فوراً.`);
+  }
+  resetForm(); reloadAll();
+}
+function toggleVisible(recId){
+  const arr=load("gtm_products");
+  const rec=arr.find(r=>r.id===recId); if(!rec) return;
+  rec.value.visible = rec.value.visible===false ? true : false;
+  save("gtm_products", arr);
+  showMsg(rec.value.visible ? `تم إظهار “${rec.value.name}”` : `تم إخفاء “${rec.value.name}”`);
+  reloadAll();
+}
+function deleteProduct(recId){
+  const arr=load("gtm_products");
+  const rec=arr.find(r=>r.id===recId);
+  if(!rec) return;
+  if(!confirm(`متأكد تحذف “${rec.value.name}”؟`)) return;
+  save("gtm_products", arr.filter(r=>r.id!==recId));
+  showMsg("تم حذف المنتج.");
+  reloadAll();
+}
+
+/* ---------- الطلبات ---------- */
+function renderOrders(){
+  const list=getOrders().slice().reverse(); // الأحدث أولاً
+  const el=document.getElementById("ordersList");
+  document.getElementById("ordersHint").textContent = list.length ? `عندك ${list.length} طلب — غيّر الحالة أو احذف أو كلم الزبون واتساب.` : "لسه مفيش طلبات — أول ما حد يطلب هيظهر هنا.";
+  if(!list.length){ el.innerHTML=""; return; }
+  const s=getSettings();
+  el.innerHTML=list.map(o=>{
+    const items=(o.items||[]).map(it=>`${esc(it.name)} — مقاس ${esc(it.size)} × ${it.qty} — ${Number(it.price).toLocaleString("ar-EG")} ج`).join("<br>");
+    const date=o.createdAt ? new Date(o.createdAt).toLocaleString("ar-EG") : "";
+    const wa=`https://wa.me/${toWA(o.phone)}?text=${encodeURIComponent("أهلاً "+(o.name||"")+"، بخصوص طلبك "+(o.orderNumber||"")+" من GTM STYLE")}`;
+    return `<div class="o-card">
+      <div class="o-top"><b>طلب ${esc(o.orderNumber||"")}</b><span class="status status-${esc(o.status||"جديد")}">${esc(o.status||"جديد")}</span></div>
+      <p style="margin:8px 0 0; font-size:13px; line-height:1.9;">
+        <b>${esc(o.name||"")}</b> • ${esc(o.phone||"")} • ${esc(o.governorate||"")}<br>
+        ${esc(o.address||"")} • الدفع: ${esc(o.payment||"")} • ${date}
+      </p>
+      <div class="o-items">${items}<br><b style="color:#fff;">المجموع: ${Number(o.subtotal||0).toLocaleString("ar-EG")} + شحن ${Number(o.shipping||0).toLocaleString("ar-EG")} = ${Number(o.total||0).toLocaleString("ar-EG")} ج</b></div>
+      <div class="o-actions">
+        <select onchange="changeOrderStatus('${o._recId}', this.value)">
+          ${["جديد","قيد التجهيز","تم الشحن","تم التوصيل","ملغي"].map(st=>`<option ${o.status===st?"selected":""}>${st}</option>`).join("")}
+        </select>
+        <a href="${wa}" target="_blank" class="btn btn-lime btn-small" style="text-decoration:none; display:inline-block;">واتساب الزبون</a>
+        <button class="btn btn-danger btn-small" onclick="deleteOrder('${o._recId}')">حذف الطلب</button>
+      </div></div>`;
+  }).join("");
+}
+function changeOrderStatus(recId, status){
+  const arr=load("gtm_orders");
+  const rec=arr.find(r=>r.id===recId); if(!rec) return;
+  rec.value.status=status; save("gtm_orders", arr);
+  showMsg(`تم تحديث حالة الطلب ${rec.value.orderNumber} إلى: ${status}`);
+  reloadAll();
+}
+function deleteOrder(recId){
+  const arr=load("gtm_orders");
+  const rec=arr.find(r=>r.id===recId);
+  if(!rec) return;
+  if(!confirm(`متأكد تحذف الطلب ${rec.value.orderNumber}؟`)) return;
+  save("gtm_orders", arr.filter(r=>r.id!==recId));
+  showMsg("تم حذف الطلب.");
+  reloadAll();
+}
+
+/* ---------- الإعدادات ---------- */
+function saveSettings(e){
+  e.preventDefault();
+  const y={
+    storeName: document.getElementById("s_store").value.trim()||"GTM STYLE",
+    whatsapp: document.getElementById("s_whatsapp").value.trim()||DEFAULT_SETTINGS.whatsapp,
+    adminPassword: document.getElementById("s_pass").value.trim()||DEFAULT_SETTINGS.adminPassword,
+    shipping: Number(document.getElementById("s_ship").value)||60,
+    freeShipping: Number(document.getElementById("s_free").value)||1500,
+  };
+  const arr=load("gtm_settings");
+  if(arr.length){ arr[0].value=y; save("gtm_settings", arr); }
+  else { save("gtm_settings", [{ id:"rec-settings-1", value:y }]); }
+  showMsg("تم حفظ الإعدادات بنجاح — رقم الواتساب وكلمة السر والشحن اتحدثوا.");
+}
+
+/* ---------- تشغيل ---------- */
+if(sessionStorage.getItem("gtm_admin_logged")==="1"){ openAdmin(); }
+updateSubOptions();
+</script>
+</body>
+</html>
